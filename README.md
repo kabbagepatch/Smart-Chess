@@ -1,4 +1,6 @@
-# smart-chess
+# Smart Chess
+
+A Chess App built using Vue.js. Currently supports human-vs-human Eventually will support AI players of different levels for human-vs-AI games.
 
 ## Project setup
 ```
