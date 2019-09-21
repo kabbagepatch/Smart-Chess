@@ -3,6 +3,7 @@
     v-bind:class="[
       x % 2 === 0 && y % 2 !== 0 || x % 2 !== 0 && y % 2 === 0 ? 'even-piece' : 'odd-piece',
       this.isSelected ? 'selected-piece' : '',
+      this.isPossibleMove ? 'possible-move' : '',
       'piece',
     ]"
     @click="handleSquareClick"
@@ -20,8 +21,11 @@ export default {
     y: Number,
   },
   computed: {
+    currentSquareString() {
+      return `${String.fromCharCode(96 + this.y)}${9 - this.x}`;
+    },
     currentPiece() {
-      return this.$store.state.chess.get(`${String.fromCharCode(96 + this.y)}${9 - this.x}`);
+      return this.$store.state.chess.get(this.currentSquareString);
     },
     iconUrl() {
       if (!this.currentPiece) {
@@ -61,6 +65,10 @@ export default {
         && selectedPiece.x === this.x
         && selectedPiece.y === this.y;
     },
+    isPossibleMove() {
+      const possibleMoveArrays = this.$store.state.possibleMoves.map(move => move.substr(-2));
+      return possibleMoveArrays.includes(this.currentSquareString);
+    },
   },
   methods: {
     handleSquareClick() {
@@ -85,11 +93,12 @@ export default {
   }
 
   .even-piece {
-    background-color: rgb(80, 20, 20);
+    background-color: rgb(105, 52, 14);
   }
 
-  .selected-piece {
-    background-color: rgb(150, 50, 50);
+  .selected-piece, .possible-move {
+    outline: 4px solid yellow;
+    outline-offset: -5px;
   }
 
   .piece, .piece img {

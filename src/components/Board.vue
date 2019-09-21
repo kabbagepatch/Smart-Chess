@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Piece from './Pieces/Piece.vue';
+import Piece from './Piece.vue';
 
 export default {
   name: 'my-grid',
