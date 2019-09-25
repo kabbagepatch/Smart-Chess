@@ -25,7 +25,7 @@ export default {
       return `${String.fromCharCode(96 + this.y)}${9 - this.x}`;
     },
     currentPiece() {
-      return this.$store.state.chess.get(this.currentSquareString);
+      return this.$store.state.chessBoard.get(this.currentSquareString);
     },
     iconUrl() {
       if (!this.currentPiece) {
@@ -76,8 +76,8 @@ export default {
         this.$store.commit('unSelectPiece');
         return;
       }
-      const currentPiece = this.$store.state.chess.get(`${String.fromCharCode(96 + this.y)}${9 - this.x}`);
-      if (currentPiece && currentPiece.color === this.$store.state.chess.turn()) {
+      const currentPiece = this.$store.state.chessBoard.get(`${String.fromCharCode(96 + this.y)}${9 - this.x}`);
+      if (currentPiece && currentPiece.color === this.$store.state.chessBoard.turn()) {
         this.$store.commit('selectPiece', { x: this.x, y: this.y });
       } else if (this.$store.state.selectedPiece) {
         this.$store.commit('moveTo', { x: this.x, y: this.y });

@@ -1,9 +1,7 @@
-export function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
+import { getRandomInt } from './helpers';
 
-export function getMove(chess) {
-  const moves = chess.moves({ verbose: true });
+export default function getMove(chessBoard) {
+  const moves = chessBoard.moves({ verbose: true });
   const randomMove = getRandomInt(moves.length);
   return moves[randomMove];
 }

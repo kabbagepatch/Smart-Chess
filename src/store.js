@@ -2,13 +2,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Chess from 'chess.js';
-import { getMove } from './randomAI';
+// import getRandomMove from './randomAI';
+import getGreedyMove from './greedyAI';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    chess: new Chess(),
+    chessBoard: new Chess(),
     selectedPiece: null,
     moveResult: null,
     possibleMoves: [],
@@ -17,7 +18,7 @@ export default new Vuex.Store({
     selectPiece(state, data) {
       const { x, y } = data;
       const squareString = `${String.fromCharCode(96 + y)}${9 - x}`;
-      const { color, type } = state.chess.get(squareString);
+      const { color, type } = state.chessBoard.get(squareString);
       state.selectedPiece = {
         x,
         y,
@@ -25,29 +26,31 @@ export default new Vuex.Store({
         color,
         type,
       };
-      state.possibleMoves = state.chess.moves({ square: squareString });
+      state.possibleMoves = state.chessBoard.moves({ square: squareString });
     },
     unSelectPiece(state) {
       state.selectedPiece = null;
       state.possibleMoves = [];
     },
     moveTo(state, data) {
-      state.moveResult = state.chess.move({
+      state.moveResult = state.chessBoard.move({
         from: state.selectedPiece.squareString,
         to: `${String.fromCharCode(96 + data.y)}${9 - data.x}`,
       });
-      state.chess = new Chess(state.chess.fen());
+      state.chessBoard = new Chess(state.chessBoard.fen());
       state.selectedPiece = null;
       state.possibleMoves = [];
 
       // AI's turn
-      if (state.moveResult) {
-        state.moveResult = state.chess.move(getMove(state.chess));
-        state.chess = new Chess(state.chess.fen());
-      }
+      setTimeout(() => {
+        if (state.moveResult) {
+          state.moveResult = state.chessBoard.move(getGreedyMove(state.chessBoard));
+          state.chessBoard = new Chess(state.chessBoard.fen());
+        }
+      }, 500);
     },
   },
   getters: {
-    chess: state => state.chess,
+    chessBoard: state => state.chessBoard,
   },
 });
